@@ -3,6 +3,7 @@ package sendFiles.component;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
@@ -15,10 +16,17 @@ public class SingleFile extends AnchorPane {
     private Label nameID;
 
     @FXML
+    private Button closeID;
+
+    @FXML
     private ProgressBar progressID;
 
     @FXML
     private Label percentID;
+
+    public Button getCloseButton() {
+        return closeID;
+    }
 
     public SingleFile(Task<String> item) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SingleFile.fxml"));

@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
 public class Home implements Initializable {
 
 
-    public static ObservableList<File> listFiles = FXCollections.observableArrayList();
     @FXML
     private ScrollPane dragID;
     @FXML
@@ -39,13 +38,13 @@ public class Home implements Initializable {
     private Circle sendID;
     @FXML
     private TextField hostID;
+
     private List<File> files;
+
+    public static ObservableList<File> listFiles = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /*Server server = new Server();
-        server.start();*/
-
         try {
             ipID.setText(Utils.myIP());
         } catch (IOException e) {
@@ -83,7 +82,12 @@ public class Home implements Initializable {
             success = true;
             files = db.getFiles();
             for (File file : files) {
-                sendBoxID.getChildren().add(0, new SingleFile(file.getName()));
+                SingleFile singleFile = new SingleFile(file.getName());
+                singleFile.getCloseButton().setOnAction(event -> {
+                    sendBoxID.getChildren().remove(singleFile);
+                    files.remove(file);
+                });
+                sendBoxID.getChildren().add(0, singleFile);
             }
 
         }

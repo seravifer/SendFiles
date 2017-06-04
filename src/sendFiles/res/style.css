@@ -31,3 +31,11 @@
 .progress-bar > .bar {
     -fx-background-color: #4DB6AC;
 }
+
+.close {
+    -fx-background-color: transparent;
+}
+
+.close:hover {
+    -fx-text-fill: #F44336;
+}
