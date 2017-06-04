@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="521.0" prefWidth="350.0" style="-fx-background-color: #e5e9ec;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sendFiles.Controller2">
+   <children>
+      <ScrollPane fx:id="dragID" hbarPolicy="NEVER" layoutX="80.0" layoutY="142.0" prefHeight="379.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="142.0">
+         <content>
+            <VBox fx:id="sendBoxID" spacing="20.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <AnchorPane layoutX="79.0" prefHeight="142.0" prefWidth="370.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="ipID" alignment="CENTER" layoutX="24.0" layoutY="20.0" prefHeight="43.0" prefWidth="303.0" text="127.0.0.1" textAlignment="CENTER" textFill="#30b2a8">
+               <font>
+                  <Font name="Roboto Medium" size="35.0" />
+               </font>
+            </Label>
+            <Circle fx:id="sendID" fill="#1caf9a" layoutX="315.0" layoutY="121.0" radius="21.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateY="20.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Circle>
+            <Label layoutX="309.0" layoutY="115.0" text="&gt;" textFill="WHITE" translateY="11.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="hostID" layoutX="101.0" layoutY="85.0" text="127.0.0.1" />
+         </children>
+         <effect>
+            <DropShadow color="#00000037" height="23.85" offsetY="2.0" radius="5.4625" width="0.0" />
+         </effect>
+      </AnchorPane>
+   </children>
+</AnchorPane>

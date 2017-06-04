@@ -1,4 +1,4 @@
-package shared;
+package sendFiles;
 
 import javafx.concurrent.Task;
 import javafx.css.PseudoClass;
@@ -9,11 +9,12 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import shared.component.ListItems;
-import shared.model.Client;
-import shared.model.Server;
-import shared.model.Utils;
+import javafx.scene.layout.VBox;
+import sendFiles.component.ListItems;
+import sendFiles.component.SingleFile;
+import sendFiles.model.Client;
+import sendFiles.model.Server;
+import sendFiles.model.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class Controller implements Initializable {
     private Label ipID;
 
     @FXML
-    private ListView<Task<String>> listaID;
+    private VBox sendBoxID;
 
     private List<File> files;
 
@@ -51,7 +52,7 @@ public class Controller implements Initializable {
         try {
             ipID.setText(Utils.myIP());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("No se ha podido establecer la IP.");
         }
 
         dragID.setOnDragOver(this::mouseDragOver);
@@ -82,31 +83,6 @@ public class Controller implements Initializable {
         AnchorPane.setRightAnchor(listItems, 1.0);
         AnchorPane.setTopAnchor(listItems, 1.0);
         recibidosID.getChildren().add(listItems);
-
-        listaID.setItems(server.listFiles);
-        listaID.setCellFactory(lista -> new ListCell<Task<String>>() {
-            @Override
-            protected void updateItem(Task<String> item, boolean empty) {
-                if (empty) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    HBox hBox = new HBox(5);
-                    Label label = new Label();
-                    label.textProperty().bind(item.valueProperty());
-                    ProgressBar progressBar = new ProgressBar(0);
-                    progressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
-                        if (newValue.doubleValue() == 1.0) {
-                            progressBar.setVisible(false);
-                        }
-                    });
-                    progressBar.progressProperty().bind(item.progressProperty());
-                    hBox.getChildren().addAll(label, progressBar);
-                    setGraphic(hBox);
-                }
-
-            }
-        });
     }
 
     private void mouseDragDropped(final DragEvent e) {
@@ -116,6 +92,10 @@ public class Controller implements Initializable {
         if (db.hasFiles()) {
             success = true;
             files = db.getFiles();
+            for (File file : files) {
+                sendBoxID.getChildren().add(0, new Label(file.getName()));
+            }
+
         }
         e.setDropCompleted(success);
         e.consume();

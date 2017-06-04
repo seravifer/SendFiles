@@ -29,7 +29,7 @@ public class PruebaServer {
         }
 
         try {
-            out = new FileOutputStream("C:\\Users\\Sergi\\Google Drive\\Java\\shared\\files\\2.txt");
+            out = new FileOutputStream("C:\\Users\\Sergi\\Google Drive\\Java\\sendFiles\\files\\2.txt");
         } catch (FileNotFoundException ex) {
             System.out.println("SingleFile not found. ");
         }

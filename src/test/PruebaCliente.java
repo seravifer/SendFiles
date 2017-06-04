@@ -8,7 +8,7 @@ public class PruebaCliente {
 
         socket = new Socket(host, 4444);
 
-        File file = new File("C:\\Users\\Sergi\\Google Drive\\Java\\shared\\files\\1.txt");
+        File file = new File("C:\\Users\\Sergi\\Google Drive\\Java\\sendFiles\\files\\1.txt");
         // Get the size of the file
         long length = file.length();
         byte[] bytes = new byte[16 * 1024];

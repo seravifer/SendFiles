@@ -1,9 +1,10 @@
-package shared.model;
+package sendFiles.model;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+// TODO: 04/06/2017 Client task
 public class Client {
 
     private Socket socket = null;
@@ -12,7 +13,7 @@ public class Client {
         try {
             socket = new Socket(ip, port);
         } catch (UnknownHostException e) {
-            System.err.println("Servidor no encontrado..");
+            System.err.println("Servidor no encontrado.");
         } catch (IOException e) {
             System.err.println("Error en la conexión del servidor.");
         }
@@ -22,7 +23,7 @@ public class Client {
     public void send(String path) throws IOException {
         OutputStream sendFile = socket.getOutputStream();
         DataOutputStream out = null;
-        InputStream localFile = null;
+        InputStream readFile = null;
 
         try {
             out = new DataOutputStream(socket.getOutputStream());
@@ -31,13 +32,13 @@ public class Client {
         }
 
         File file = new File(path);
-        long length = file.length();
+        long size = file.length();
 
         out.writeUTF(file.getName());
-        out.writeLong(length);
+        out.writeLong(size);
 
         try {
-            localFile = new FileInputStream(file);
+            readFile = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             System.err.println("El archivo no esta disponible.");
         }
@@ -45,13 +46,13 @@ public class Client {
         byte[] bytes = new byte[1024];
 
         int count;
-        while ((count = localFile.read(bytes)) > 0) {
+        while ((count = readFile.read(bytes)) > 0) {
             sendFile.write(bytes, 0, count);
             sendFile.flush();
         }
 
         sendFile.close();
-        localFile.close();
+        readFile.close();
 
         out.close();
     }

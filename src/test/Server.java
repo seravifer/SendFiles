@@ -27,7 +27,7 @@ public class Server {
 
         OutputStream writeFile = null;
         try {
-            writeFile = new FileOutputStream("C:\\Users\\Sergi\\Google Drive\\Java\\shared\\files\\2.txt");
+            writeFile = new FileOutputStream("C:\\Users\\Sergi\\Google Drive\\Java\\sendFiles\\files\\2.txt");
         } catch (FileNotFoundException e) {
             System.out.println("Archivo no encontrado.");
         }

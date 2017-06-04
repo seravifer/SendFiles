@@ -1,4 +1,4 @@
-package shared.model;
+package sendFiles.model;
 
 import javafx.concurrent.Task;
 
@@ -17,33 +17,34 @@ public class Download extends Task<String> {
     protected String call() throws Exception {
 
         DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-        InputStream readFile = clientSocket.getInputStream();
-        OutputStream writeFile = null;
+        InputStream downloadFile = clientSocket.getInputStream();
+        OutputStream saveFile = null;
 
         String nameFile = in.readUTF();
-        long length = in.readLong();
+        long sizeFile = in.readLong();
 
         try {
-            writeFile = new FileOutputStream(Utils.getPath() + "r_" + nameFile);
+            saveFile = new FileOutputStream(Utils.getPath() + "r_" + nameFile);
         } catch (FileNotFoundException e) {
             System.err.println("A ocurrido un problema con el archivo.");
         }
 
         updateValue(nameFile);
-        updateProgress(0, length);
+        updateProgress(0, sizeFile);
 
         int count;
         long size = 0;
 
         byte[] bytes = new byte[1024];
 
-        while ((count = readFile.read(bytes)) > 0) {
-            writeFile.write(bytes, 0, count);
-            updateProgress(size += count, length);
+        while ((count = downloadFile.read(bytes)) > 0) {
+            saveFile.write(bytes, 0, count);
+            saveFile.flush();
+            updateProgress(size += count, sizeFile);
         }
 
-        readFile.close();
-        writeFile.close();
+        downloadFile.close();
+        saveFile.close();
 
         in.close();
         clientSocket.close();

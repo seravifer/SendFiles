@@ -1,0 +1,47 @@
+#drag {
+    -fx-border-width: 15px;
+    -fx-border-radius: 40px;
+    -fx-border-style: dashed;
+}
+
+.drag:selected {
+    -fx-border-color: #0046cc;
+}
+
+.drag {
+    -fx-border-color: #cccccc;
+}
+
+.scroll-pane {
+    -fx-background:  #e5e9ec;
+}
+
+.scroll-pane {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane:focused {
+    -fx-background-insets: 0;
+}
+
+.scroll-pane .corner {
+    -fx-background-insets: 0;
+}
+
+.progress-bar {
+    -fx-min-height: 0;
+}
+
+.progress-bar > .track, .progress-bar > .bar {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #E0E0E0;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: #4DB6AC;
+}

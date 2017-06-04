@@ -1,4 +1,4 @@
-package shared.component;
+package sendFiles.component;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -31,7 +31,7 @@ public class ListItems extends ScrollPane {
             while (c.next()) {
                 if (c.wasAdded()) {
                     for (Task<String> additem : c.getAddedSubList()) {
-                        itemsID.getChildren().add(new File(additem));
+                        itemsID.getChildren().add(0, new SingleFile(additem));
                     }
                 }
             }

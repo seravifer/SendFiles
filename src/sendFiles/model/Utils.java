@@ -1,4 +1,4 @@
-package shared.model;
+package sendFiles.model;
 
 import java.io.*;
 import java.net.URL;

@@ -46,7 +46,7 @@ public class Client {
     }*/
 
 
-        File file = new File("C:\\Users\\Sergi\\Google Drive\\Java\\shared\\files\\1.txt");
+        File file = new File("C:\\Users\\Sergi\\Google Drive\\Java\\sendFiles\\files\\1.txt");
         System.out.println(file.getAbsoluteFile());
         long length = file.length();
 

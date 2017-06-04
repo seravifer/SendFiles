@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<fx:root minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="300.0" style="-fx-background-color: white;" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="nameID" layoutX="63.0" layoutY="12.0" prefHeight="30.0" prefWidth="195.0" text="Nombre" AnchorPane.leftAnchor="63.0" AnchorPane.topAnchor="10.0">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <ProgressBar fx:id="progressID" layoutX="63.0" layoutY="70.0" prefHeight="8.0" prefWidth="221.0" progress="0.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="63.0" AnchorPane.rightAnchor="14.0" />
+        <Label fx:id="sizeID" layoutX="251.0" layoutY="19.0" text="99%" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="19.0">
+         <font>
+            <Font name="Roboto Light" size="18.0" />
+         </font></Label>
+      <Circle fill="#999999" layoutX="32.0" layoutY="32.0" radius="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Label fx:id="nameID1" layoutX="63.0" layoutY="38.0" prefHeight="18.0" prefWidth="195.0" text="Información">
+         <font>
+            <Font name="Roboto Light" size="14.0" />
+         </font></Label>
+      <ImageView fitHeight="25.0" fitWidth="24.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true">
+         <image>
+            <Image url="@../res/folder.png" />
+         </image>
+      </ImageView>
+    </children>
+    <effect>
+        <DropShadow blurType="TWO_PASS_BOX" color="#00000029" height="18.9" offsetY="2.0" radius="9.69" width="21.86" />
+    </effect>
+</fx:root>

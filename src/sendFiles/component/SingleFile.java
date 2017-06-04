@@ -1,4 +1,4 @@
-package shared.component;
+package sendFiles.component;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -38,6 +38,22 @@ public class SingleFile extends AnchorPane {
         });
 
         progressID.progressProperty().bind(item.progressProperty());
+
+    }
+
+    public SingleFile(String name) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SingleFile.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            System.err.println("Error al cargar la vista: " + this.getClass().getSimpleName());
+        }
+
+        nameID.setText(name);
+        progressID.setProgress(0.3);
+
 
     }
 }

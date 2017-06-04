@@ -1,4 +1,4 @@
-package shared.model;
+package sendFiles.model;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
