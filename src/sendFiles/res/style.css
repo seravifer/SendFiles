@@ -1,19 +1,5 @@
-#drag {
-    -fx-border-width: 15px;
-    -fx-border-radius: 40px;
-    -fx-border-style: dashed;
-}
-
-.drag:selected {
-    -fx-border-color: #0046cc;
-}
-
-.drag {
-    -fx-border-color: #cccccc;
-}
-
 .scroll-pane {
-    -fx-background:  #e5e9ec;
+    -fx-background: #e5e9ec;
 }
 
 .scroll-pane {

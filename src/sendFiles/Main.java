@@ -8,24 +8,21 @@ import java.io.IOException;
 
 public class Main extends Application {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
-        /*root = FXMLLoader.load(getClass().getResource("view/root.fxml"));
-        home = FXMLLoader.load(getClass().getResource("view/home2.fxml"));
-        inbox = FXMLLoader.load(getClass().getResource("view/inbox.fxml"));*/
+        Framework framework = new Framework();
 
-        Windows windows = new Windows();
-        Scene scene = new Scene(windows);
+        Scene scene = new Scene(framework);
         scene.getStylesheets().add(getClass().getResource("res/style.css").toString());
 
         stage.setScene(scene);
         stage.setTitle("Send Files");
+        stage.setMinWidth(450);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }

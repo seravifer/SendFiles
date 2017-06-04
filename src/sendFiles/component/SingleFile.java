@@ -18,12 +18,13 @@ public class SingleFile extends AnchorPane {
     private ProgressBar progressID;
 
     @FXML
-    private Label sizeID;
+    private Label percentID;
 
     public SingleFile(Task<String> item) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SingleFile.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
+
         try {
             fxmlLoader.load();
         } catch (IOException exception) {
@@ -32,13 +33,17 @@ public class SingleFile extends AnchorPane {
 
         nameID.textProperty().bind(item.valueProperty());
         progressID.progressProperty().addListener((observable, oldValue, newValue) -> {
+
             if (newValue.doubleValue() == 1.0) {
                 progressID.setVisible(false);
             }
+
+            int percent = (int) Math.round(newValue.doubleValue() * 100);
+            percentID.setText(percent + "%");
+
         });
 
         progressID.progressProperty().bind(item.progressProperty());
-
     }
 
     public SingleFile(String name) {
@@ -52,8 +57,6 @@ public class SingleFile extends AnchorPane {
         }
 
         nameID.setText(name);
-        progressID.setProgress(0.3);
-
-
+        percentID.setVisible(false);
     }
 }

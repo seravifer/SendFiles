@@ -1,59 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="545.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sendFiles.Controller">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="521.0" prefWidth="350.0"
+            style="-fx-background-color: #e5e9ec;" xmlns="http://javafx.com/javafx/8.0.111"
+            fx:controller="sendFiles.controller.Home">
     <children>
-        <Button fx:id="sendID" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" text="Enviar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="91.0" />
-        <TextField fx:id="hostID" layoutX="14.0" layoutY="57.0" prefHeight="25.0" prefWidth="157.0" promptText="IP..." text="4444" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="57.0" />
-        <Label layoutX="14.0" layoutY="15.0" text="IP:">
-            <font>
-                <Font name="System Bold" size="22.0" />
-            </font>
-        </Label>
-        <Label fx:id="ipID" layoutX="46.0" layoutY="21.0" text="127.0.0.1">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Label>
-        <TabPane layoutX="192.0" layoutY="7.0" prefHeight="383.0" prefWidth="345.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="192.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <tabs>
-                <Tab text="Enviados">
-                    <content>
-                        <AnchorPane id="drag" fx:id="dragID" prefHeight="367.0" prefWidth="329.0" styleClass="drag">
-                            <cursor>
-                                <Cursor fx:constant="DEFAULT" />
-                            </cursor>
-                     <children>
-                        <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <content>
-                              <VBox fx:id="sendBoxID" spacing="20.0">
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                     </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab text="Recibidos">
-                    <content>
-                        <AnchorPane fx:id="recibidosID" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
+        <ScrollPane fx:id="dragID" hbarPolicy="NEVER" layoutX="80.0" layoutY="142.0" prefHeight="379.0"
+                    prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="142.0">
+            <content>
+                <VBox fx:id="sendBoxID" spacing="20.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    </padding>
+                </VBox>
+            </content>
+        </ScrollPane>
+        <AnchorPane layoutX="79.0" prefHeight="142.0" prefWidth="370.0"
+                    style="-fx-background-color: white; -fx-border-width: 1 00 0 0; -fx-border-color: black;"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label fx:id="ipID" alignment="CENTER" layoutX="24.0" layoutY="20.0" prefHeight="43.0" prefWidth="303.0"
+                       text="127.0.0.1" textAlignment="CENTER" textFill="#30b2a8">
+                    <font>
+                        <Font name="Roboto Medium" size="35.0"/>
+                    </font>
+                </Label>
+                <Circle fx:id="sendID" fill="#1caf9a" layoutX="315.0" layoutY="121.0" radius="21.0" stroke="BLACK"
+                        strokeType="INSIDE" strokeWidth="0.0" translateY="20.0">
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Circle>
+                <Label layoutX="309.0" layoutY="115.0" text="&gt;" textFill="WHITE" translateY="11.0">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="hostID" layoutX="101.0" layoutY="85.0" text="4444"/>
+            </children>
+            <effect>
+                <DropShadow color="#00000037" height="23.85" offsetY="2.0" radius="5.4625" width="0.0"/>
+            </effect>
+        </AnchorPane>
     </children>
 </AnchorPane>

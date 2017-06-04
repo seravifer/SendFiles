@@ -1,19 +1,22 @@
-package sendFiles;
+package sendFiles.controller;
 
-import javafx.concurrent.Task;
-import javafx.css.PseudoClass;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import sendFiles.component.ListItems;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import sendFiles.component.SingleFile;
 import sendFiles.model.Client;
-import sendFiles.model.Server;
 import sendFiles.model.Utils;
 
 import java.io.File;
@@ -22,32 +25,26 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Home implements Initializable {
 
+
+    public static ObservableList<File> listFiles = FXCollections.observableArrayList();
     @FXML
-    private AnchorPane recibidosID;
-
-    @FXML
-    private Button sendID;
-
-    @FXML
-    private TextField hostID;
-
-    @FXML
-    private AnchorPane dragID;
-
-    @FXML
-    private Label ipID;
-
+    private ScrollPane dragID;
     @FXML
     private VBox sendBoxID;
-
+    @FXML
+    private Label ipID;
+    @FXML
+    private Circle sendID;
+    @FXML
+    private TextField hostID;
     private List<File> files;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Server server = new Server();
-        server.start();
+        /*Server server = new Server();
+        server.start();*/
 
         try {
             ipID.setText(Utils.myIP());
@@ -59,9 +56,9 @@ public class Controller implements Initializable {
 
         dragID.setOnDragDropped(this::mouseDragDropped);
 
-        dragID.setOnDragExited(event -> dragID.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false));
+        dragID.setOnDragExited(event -> dragID.setEffect(null));
 
-        sendID.setOnAction(event -> {
+        sendID.setOnMouseClicked(event -> {
 
             for (File file : files) {
                 try {
@@ -72,17 +69,10 @@ public class Controller implements Initializable {
                 }
             }
 
+            listFiles.addAll(files);
             files.clear();
+            sendBoxID.getChildren().clear();
         });
-
-        ListItems listItems = new ListItems();
-        listItems.setItems(server.listFiles);
-
-        AnchorPane.setBottomAnchor(listItems, 1.0);
-        AnchorPane.setLeftAnchor(listItems, 1.0);
-        AnchorPane.setRightAnchor(listItems, 1.0);
-        AnchorPane.setTopAnchor(listItems, 1.0);
-        recibidosID.getChildren().add(listItems);
     }
 
     private void mouseDragDropped(final DragEvent e) {
@@ -93,7 +83,7 @@ public class Controller implements Initializable {
             success = true;
             files = db.getFiles();
             for (File file : files) {
-                sendBoxID.getChildren().add(0, new Label(file.getName()));
+                sendBoxID.getChildren().add(0, new SingleFile(file.getName()));
             }
 
         }
@@ -105,7 +95,11 @@ public class Controller implements Initializable {
         final Dragboard db = e.getDragboard();
 
         if (db.hasFiles()) {
-            dragID.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
+            InnerShadow innerShadow = new InnerShadow(BlurType.THREE_PASS_BOX, Color.web("#097ebd81"),
+                    51.36, 0.41, 0.0, 0.0);
+            innerShadow.setHeight(100);
+            innerShadow.setWidth(100);
+            dragID.setEffect(innerShadow);
             e.acceptTransferModes(TransferMode.COPY);
         } else {
             e.consume();
