@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0"
+         prefWidth="260.0" style="-fx-background-color: white;" type="AnchorPane"
+         xmlns="http://javafx.com/javafx/8.0.111">
+    <children>
+        <Label fx:id="nameID" layoutX="15.0" layoutY="21.0" prefHeight="30.0" prefWidth="195.0" text="Nombre"
+               AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="21.0">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Label>
+        <ProgressBar fx:id="progressID" layoutX="14.0" layoutY="62.0" prefHeight="18.0" prefWidth="273.0" progress="0.0"
+                     AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"/>
+        <Label fx:id="sizeID" layoutX="265.0" layoutY="27.0" text="Size" AnchorPane.rightAnchor="14.0"
+               AnchorPane.topAnchor="27.0"/>
+    </children>
+</fx:root>

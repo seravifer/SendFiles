@@ -1,14 +1,17 @@
 package shared.model;
 
 import javafx.application.Platform;
-import shared.Controller;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
 
+    public ObservableList<Task<String>> listFiles = FXCollections.observableArrayList();
     private int[] ports = {4444, 4445, 4446};
     private ServerSocket serverSocket = null;
     private Socket clientSocket = null;
@@ -18,7 +21,7 @@ public class Server extends Thread {
             try {
                 serverSocket = new ServerSocket(port);
                 System.out.println("Servidor creado con éxito en el puerto " + port);
-            } catch (IOException ex) {
+            } catch (IOException e) {
                 continue;
             }
             break;
@@ -35,37 +38,10 @@ public class Server extends Thread {
                 System.err.println("A ocurrido un problema al aceptar el cliente.");
             }
 
-            InputStream readFile = clientSocket.getInputStream();
+            Download download = new Download(clientSocket);
+            Platform.runLater(() -> listFiles.add(0, download));
+            new Thread(download).start();
 
-            //PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            System.out.println("Cliente: " + in.readLine());
-            System.out.println("Solicitud aceptada.");
-            //out.println("Conexión aceptada.");
-
-            OutputStream writeFile = null;
-            try {
-                writeFile = new FileOutputStream(Utils.getPath() + "r_" + in.readLine());
-            } catch (FileNotFoundException e) {
-                System.out.println("Archivo no encontrado.");
-            }
-
-            byte[] bytes = new byte[1024 * 6];
-
-            int count;
-            while ((count = readFile.read(bytes)) >= 0) {
-                writeFile.write(bytes, 0, count);
-            }
-
-            System.out.println("Archivo recibido: " + writeFile);
-
-            readFile.close();
-            writeFile.close();
-
-            //out.close();
-            in.close();
-            clientSocket.close();
         }
     }
 

@@ -1,17 +1,16 @@
 package shared;
 
+import javafx.concurrent.Task;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
+import javafx.scene.layout.HBox;
+import shared.component.ListItems;
 import shared.model.Client;
 import shared.model.Server;
 import shared.model.Utils;
@@ -23,6 +22,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
+    @FXML
+    private AnchorPane recibidosID;
 
     @FXML
     private Button sendID;
@@ -37,7 +39,7 @@ public class Controller implements Initializable {
     private Label ipID;
 
     @FXML
-    private Label statusID;
+    private ListView<Task<String>> listaID;
 
     private List<File> files;
 
@@ -68,7 +70,42 @@ public class Controller implements Initializable {
                     e.printStackTrace();
                 }
             }
+
             files.clear();
+        });
+
+        ListItems listItems = new ListItems();
+        listItems.setItems(server.listFiles);
+
+        AnchorPane.setBottomAnchor(listItems, 1.0);
+        AnchorPane.setLeftAnchor(listItems, 1.0);
+        AnchorPane.setRightAnchor(listItems, 1.0);
+        AnchorPane.setTopAnchor(listItems, 1.0);
+        recibidosID.getChildren().add(listItems);
+
+        listaID.setItems(server.listFiles);
+        listaID.setCellFactory(lista -> new ListCell<Task<String>>() {
+            @Override
+            protected void updateItem(Task<String> item, boolean empty) {
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox hBox = new HBox(5);
+                    Label label = new Label();
+                    label.textProperty().bind(item.valueProperty());
+                    ProgressBar progressBar = new ProgressBar(0);
+                    progressBar.progressProperty().addListener((observable, oldValue, newValue) -> {
+                        if (newValue.doubleValue() == 1.0) {
+                            progressBar.setVisible(false);
+                        }
+                    });
+                    progressBar.progressProperty().bind(item.progressProperty());
+                    hBox.getChildren().addAll(label, progressBar);
+                    setGraphic(hBox);
+                }
+
+            }
         });
     }
 
@@ -93,9 +130,5 @@ public class Controller implements Initializable {
         } else {
             e.consume();
         }
-    }
-
-    public void setStatus(String s) {
-        statusID.setText(s);
     }
 }
