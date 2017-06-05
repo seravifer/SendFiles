@@ -8,6 +8,7 @@ import sendFiles.model.ProgressiveModel
 import tornadofx.*
 import sendFiles.util.*
 import java.io.File
+import java.net.ConnectException
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -53,8 +54,12 @@ class MainController : Controller() {
             val fileProgressive = ProgressiveModel(file)
             sent.add(fileProgressive)
             launch(CommonPool) {
-                Socket(host, port).use {
-                    uploadFile(it, fileProgressive)
+                try {
+                    Socket(host, port).use {
+                        uploadFile(it, fileProgressive)
+                    }
+                } catch(e: ConnectException) {
+                    fileProgressive.state = ProgressiveModel.FileState.FAILED
                 }
             }
         }
