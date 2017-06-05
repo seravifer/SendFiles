@@ -5,18 +5,16 @@ import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.channels.produce
 import kotlinx.coroutines.experimental.launch
 import sendFiles.model.ProgressiveModel
-import tornadofx.*
 import sendFiles.util.*
+import tornadofx.*
 import java.io.File
 import java.net.ConnectException
 import java.net.ServerSocket
 import java.net.Socket
+import java.nio.file.Path
 
-/**
- * Created by David on 04/06/2017.
- */
 class MainController : Controller() {
-    val downloadsDir = "C:\\Users\\David\\Desktop\\test".toPath()
+    val downloadsDir = app.getDownloadPath().toPath()
 
     val sent = observableListOf<ProgressiveModel<File>>()
     val downloaded = observableListOf<ProgressiveModel<File>>()

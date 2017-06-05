@@ -5,12 +5,11 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.scene.layout.AnchorPane
-import sendFiles.view.Home
 import sendFiles.model.FileModel
 import sendFiles.model.ProgressiveModel
+import sendFiles.view.Home
 import tornadofx.*
 import java.io.File
-import java.text.NumberFormat
 
 sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
     val model = FileModel().bindTo(this)
@@ -29,8 +28,7 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
         progressID.progressProperty().bind(model.progress)
         progressID.visibleProperty().bind(progressID.progressProperty().greaterThanOrEqualTo(1.0))
 
-
-        percentID.bind(Bindings.format("%.2f%s", model.progress.doubleBinding { (it?.toDouble() ?: 0.0) * 100 }, "%"))
+        percentID.bind(Bindings.format("%.0f%s", model.progress.doubleBinding { (it?.toDouble() ?: 0.0) * 100 }, "%"))
 
         when(this) {
             is HomeFileListFragment -> closeButton.setOnAction { homeComponent.files.remove(model.item) }

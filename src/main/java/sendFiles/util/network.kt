@@ -21,7 +21,7 @@ fun getIpAddress(): String =
             BufferedReader(InputStreamReader(it)).readLine()
         }
     } catch (e: SocketException) {
-        "0.0.0.0"
+        InetAddress.getLocalHost().toString()
     }
 
 fun available(port: Int): Boolean = try {

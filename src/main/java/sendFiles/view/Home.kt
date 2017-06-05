@@ -2,7 +2,6 @@ package sendFiles.view
 
 import javafx.scene.control.Label
 import javafx.scene.control.ListView
-import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
 import javafx.scene.effect.BlurType
 import javafx.scene.effect.InnerShadow
@@ -11,7 +10,6 @@ import javafx.scene.input.TransferMode
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
-import javafx.scene.shape.Circle
 import sendFiles.component.HomeFileListFragment
 import sendFiles.controller.MainController
 import sendFiles.model.ProgressiveModel
@@ -28,7 +26,7 @@ class Home : View() {
 
     override val root by fxml<AnchorPane>()
 
-    val dragID by fxid<ScrollPane>()
+    val dragID by fxid<AnchorPane>()
     val sendBoxID by fxid<ListView<ProgressiveModel<File>>>()
     val ipID by fxid<Label>()
     val sendID by fxid<StackPane>()

@@ -5,14 +5,12 @@ import javafx.scene.layout.BorderPane
 import sendFiles.controller.MainController
 import tornadofx.*
 
-/**
- * Created by David on 05/06/2017.
- */
 class Root : View() {
     val controller = find<MainController>()
     val homeComponent by inject<Home>()
     val inboxComponent by inject<Inbox>()
     val outboxComponent by inject<Outbox>()
+    val settingComponent by inject<Setting>()
 
     override val root: BorderPane by fxml()
 
@@ -22,10 +20,22 @@ class Root : View() {
     val homeButtonID by fxid<ImageView>()
 
     init {
+        primaryStage.minHeight = 500.0
+        primaryStage.minWidth = 460.0
+
         root.center = homeComponent.root
-        homeButtonID.setOnMouseClicked { root.center = homeComponent.root }
-        inboxButtonID.setOnMouseClicked { root.center = inboxComponent.root }
-        outboxButtonID.setOnMouseClicked { root.center = outboxComponent.root }
+        homeButtonID.setOnMouseClicked { root.center = homeComponent.root; setActive(homeButtonID) }
+        inboxButtonID.setOnMouseClicked { root.center = inboxComponent.root; setActive(inboxButtonID) }
+        outboxButtonID.setOnMouseClicked { root.center = outboxComponent.root; setActive(outboxButtonID) }
+        settingsButtonID.setOnMouseClicked { root.center = settingComponent.root; setActive(settingsButtonID) }
+    }
+
+    fun setActive(button: ImageView) {
+        settingsButtonID.styleClass.remove("active")
+        inboxButtonID.styleClass.remove("active")
+        outboxButtonID.styleClass.remove("active")
+        homeButtonID.styleClass.remove("active")
+        button.styleClass.add("active")
     }
 
     override fun onDelete() {
