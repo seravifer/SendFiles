@@ -2,6 +2,8 @@ package sendFiles.controller
 
 import javafx.application.Platform
 import javafx.event.EventHandler
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.stage.WindowEvent
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.consumeEach
@@ -50,9 +52,14 @@ class MainController : Controller() {
             }
         }
 
-        Platform.setImplicitExit(false)
-
-        primaryStage.onCloseRequest = EventHandler<WindowEvent> { event -> onExit(sent, downloaded, event) }
+        val previousHandler = primaryStage.onCloseRequest
+        primaryStage.onCloseRequest = EventHandler<WindowEvent> {
+            if (confirmExit()) {
+                previousHandler?.handle(it)
+            } else {
+                it.consume()
+            }
+        }
     }
 
     fun send(list: List<File>, host: String, port: Int) {
@@ -69,6 +76,32 @@ class MainController : Controller() {
                 }
             }
         }
+    }
+
+    fun confirmExit(): Boolean {
+        val sending = sent.any { it.state == ProgressiveModel.FileState.SENDING }
+        val downloading = downloaded.any { it.state == ProgressiveModel.FileState.RECEIVING }
+
+        val message = when {
+            sending && downloading -> "You have uploads and downloads in process"
+            sending -> "You have uploads in process"
+            downloading -> "You have downloads in process"
+            else -> ""
+        }
+
+        return if (message.isNotBlank()) {
+            val alert = Alert(Alert.AlertType.CONFIRMATION)
+            alert.headerText = message
+            alert.contentText = "Are you sure you want to exit?"
+
+            val buttonTypeWait = ButtonType("Wait")
+            val buttonTypeExit = ButtonType("Exit")
+
+            alert.buttonTypes.setAll(buttonTypeWait, buttonTypeExit)
+
+            val result = alert.showAndWait()
+            result.get() != buttonTypeWait
+        } else true
     }
 
     fun close() {
