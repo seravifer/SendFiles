@@ -28,11 +28,12 @@ class Home : View() {
     val ipID by fxid<Label>()
     val sendID by fxid<StackPane>()
     val hostID by fxid<TextField>()
+    val portID by fxid<TextField>()
 
     var files = observableListOf<ProgressiveModel<File>>()
 
     init {
-        ipID.text = getIpAddress()
+        ipID.text = getIpAddress() + ":" + controller.actualPort
 
         dragID.setOnDragOver(this::mouseDragOver)
         dragID.setOnDragDropped(this::mouseDragDropped)
@@ -43,36 +44,34 @@ class Home : View() {
 
         sendID.setOnMouseClicked {
             try {
-                controller.send(files.map { it.value }, "localhost", Integer.parseInt(hostID.text))
+                controller.send(files.map { it.value }, hostID.text, portID.text.toInt())
                 files.clear()
             } catch(e: NumberFormatException) {
-                tornadofx.error("Puerto inválido", "El puerto seleccionado no es un número")
+                tornadofx.error("Invalid Port", "The selected port is not a number")
             }
         }
     }
 
-    private fun mouseDragDropped(e: DragEvent) {
-        val db = e.dragboard
-        e.isDropCompleted = if (db.hasFiles()) {
+    private fun mouseDragDropped(dragEvent: DragEvent) {
+        val db = dragEvent.dragboard
+        dragEvent.isDropCompleted = if (db.hasFiles()) {
             files.addAll(db.files.map { ProgressiveModel<File>().apply { value = it } })
             true
         } else {
             false
         }
-        e.consume()
+        dragEvent.consume()
     }
 
-    private fun mouseDragOver(e: DragEvent) {
-        val db = e.dragboard
-
-        if (db.hasFiles()) {
+    private fun mouseDragOver(dragEvent: DragEvent) {
+        if (dragEvent.dragboard.hasFiles()) {
             val innerShadow = InnerShadow(BlurType.THREE_PASS_BOX, Color.web("#097ebd81"), 51.36, 0.41, 0.0, 0.0)
             innerShadow.height = 100.0
             innerShadow.width = 100.0
             dragID.effect = innerShadow
-            e.acceptTransferModes(TransferMode.COPY)
+            dragEvent.acceptTransferModes(TransferMode.COPY)
         } else {
-            e.consume()
+            dragEvent.consume()
         }
     }
 }

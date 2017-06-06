@@ -22,21 +22,23 @@ class MainController : Controller() {
     val downloaded = observableListOf<ProgressiveModel<File>>()
 
     private val testPorts = 4444..4448
+    var actualPort = "0000"
 
     private val server = try {
         testPorts.first { available(it) }
                 .let {
-                    log.info("Servidor corriendo en el puerto $it")
+                    log.info("Server running in the port $it")
+                    actualPort = it.toString()
                     ServerSocket(it)
                 }
     } catch (e: NoSuchElementException) {
-        kotlin.error("Todos los puertos entre ${testPorts.first} y ${testPorts.endInclusive} están ocupados")
+        kotlin.error("All ports between ${testPorts.first} and ${testPorts.endInclusive} are busy")
     }
 
     private val clients = produce<Socket>(CommonPool) {
         while (!server.isClosed) {
             val client = server.accept()
-            log.info("Aceptando conexión de ${client.inetAddress}")
+            log.info("Accepting connection of ${client.inetAddress}")
             send(client)
         }
     }

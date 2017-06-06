@@ -22,7 +22,7 @@ class Root : View() {
     init {
         title = "SendFiles"
         primaryStage.minHeight = 500.0
-        primaryStage.minWidth = 450.0
+        primaryStage.minWidth = 455.0
 
         root.center = homeComponent.root
         homeButtonID.setOnMouseClicked { root.center = homeComponent.root; setActive(homeButtonID) }

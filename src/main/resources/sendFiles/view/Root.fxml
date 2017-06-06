@@ -10,7 +10,7 @@
     <left>
         <AnchorPane maxWidth="-Infinity" prefHeight="400.0" prefWidth="80.0" style="-fx-background-color: #1b1e24;" BorderPane.alignment="CENTER">
             <children>
-                <ImageView id="setting" fx:id="settingsButtonID" fitHeight="37.0" fitWidth="28.0" layoutX="26.0" layoutY="461.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0">
+                <ImageView id="setting" fx:id="settingsButtonID" fitHeight="32.0" fitWidth="44.0" layoutX="24.0" layoutY="348.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="24.0">
                     <image>
                         <Image url="@../img/setting.png" />
                     </image>
@@ -18,7 +18,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </ImageView>
-                <ImageView id="outbox" fx:id="inboxButtonID" fitHeight="37.0" fitWidth="28.0" layoutX="26.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView id="inbox" fx:id="inboxButtonID" fitHeight="37.0" fitWidth="36.0" layoutX="26.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0">
                     <image>
                         <Image url="@../img/inbox.png" />
                     </image>
@@ -26,7 +26,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </ImageView>
-                <ImageView id="inbox" fx:id="outboxButtonID" fitHeight="37.0" fitWidth="28.0" layoutX="26.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView id="outbox" fx:id="outboxButtonID" fitHeight="37.0" fitWidth="36.0" layoutX="26.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0">
                     <image>
                         <Image url="@../img/outbox.png" />
                     </image>
@@ -34,7 +34,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </ImageView>
-                <ImageView id="home" fx:id="homeButtonID" fitHeight="37.0" fitWidth="28.0" layoutX="26.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="active" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="26.0">
+                <ImageView id="home" fx:id="homeButtonID" fitHeight="37.0" fitWidth="36.0" layoutX="26.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="active" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
