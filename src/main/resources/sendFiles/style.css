@@ -1,3 +1,14 @@
+.close {
+    -fx-background-color: transparent;
+}
+
+.close:hover {
+    -fx-text-fill: #F44336;
+}
+
+/***********************************************
+                 PROGRESS BAR
+ ***********************************************/
 .progress-bar {
     -fx-min-height: 0;
 }
@@ -15,14 +26,9 @@
     -fx-background-color: #4DB6AC;
 }
 
-.close {
-    -fx-background-color: transparent;
-}
-
-.close:hover {
-    -fx-text-fill: #F44336;
-}
-
+/***********************************************
+                 LIST VIEW
+ ***********************************************/
 .list-view:focused {
     -fx-background-insets: 0;
     -fx-background-radius: 0;
@@ -32,6 +38,7 @@
     -fx-background-color: #e5e9ec;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
+    -fx-padding: 5 0;
 }
 
 .list-cell:filled:selected:focused,
@@ -40,13 +47,18 @@
 .list-cell:odd,
 .list-cell:filled:hover {
     -fx-background-color: transparent;
+    -fx-padding: 5 10;
+}
+
+.list-cell:filled:selected:focused,
+.list-cell:filled:selected {
     -fx-text-fill: inherit;
     -fx-text-background-color: inherit;
 }
 
-/******************
-      Buttons
- ******************/
+/***********************************************
+                  BUTTONS
+ ***********************************************/
 #home {
     -fx-image: url("img/home.png");
 }
@@ -77,4 +89,46 @@
 
 #setting.active  {
     -fx-image: url("img/setting-active.png");
+}
+
+/***********************************************
+                  SCROLLBAR
+ ***********************************************/
+/* The main scrollbar **track** CSS class  */
+.list-view .scroll-bar:horizontal .track,
+.list-view .scroll-bar:vertical .track{
+    -fx-background-color:transparent;
+    -fx-border-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius:2em;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.list-view .scroll-bar:horizontal .increment-button ,
+.list-view .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 0 10 0;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.list-view .scroll-bar:vertical .increment-button ,
+.list-view .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+
+.list-view  .scroll-bar .increment-arrow,
+.list-view  .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding:0;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.list-view .scroll-bar:horizontal .thumb,
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
 }

@@ -9,3 +9,8 @@ fun String.toPath(): Path = Paths.get(this)
 fun App.getDownloadPath(): String =
         (config["downloadPath"] as? String) ?:
                 System.getProperty("user.dir").also { config["downloadPath"] = it; config.save() }
+
+fun App.setDownloadPatch(path: String) {
+    config["downloadPath"] = path
+    config.save()
+}

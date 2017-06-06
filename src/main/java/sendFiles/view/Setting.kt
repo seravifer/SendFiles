@@ -7,6 +7,7 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.AnchorPane
 import javafx.stage.DirectoryChooser
 import sendFiles.util.getDownloadPath
+import sendFiles.util.setDownloadPatch
 import tornadofx.*
 
 class Setting : View() {
@@ -23,7 +24,7 @@ class Setting : View() {
 
             if (selectedDirectory != null) {
                 pathID.text = selectedDirectory.absolutePath
-                config["downloadPath"] = selectedDirectory.absolutePath
+                app.setDownloadPatch(selectedDirectory.absolutePath)
             }
         }
     }
