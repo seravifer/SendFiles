@@ -2,8 +2,11 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="521.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="521.0" prefWidth="350.0"
+            xmlns="http://javafx.com/javafx/8.0.111">
     <children>
-      <ListView fx:id="outboxID" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+        <ListView fx:id="outboxID" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0"/>
     </children>
 </AnchorPane>

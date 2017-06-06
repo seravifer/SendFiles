@@ -12,14 +12,14 @@ import java.net.*
 import java.nio.file.Path
 
 fun getIpAddress(): String =
-    try {
-        val myIpAws = URL("http://checkip.amazonaws.com")
-        myIpAws.openStream().use {
-            BufferedReader(InputStreamReader(it)).readLine()
+        try {
+            val myIpAws = URL("http://checkip.amazonaws.com")
+            myIpAws.openStream().use {
+                BufferedReader(InputStreamReader(it)).readLine()
+            }
+        } catch (e: SocketException) {
+            InetAddress.getLocalHost().toString()
         }
-    } catch (e: SocketException) {
-        InetAddress.getLocalHost().toString()
-    }
 
 fun available(port: Int): Boolean = try {
     ServerSocket(port).close()

@@ -34,7 +34,7 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
         percentID.bind(Bindings.format("%.0f%s", model.progress.doubleBinding { (it?.toDouble() ?: 0.0) * 100 }, "%"))
         percentID.visibleProperty().bind(percentID.textProperty().isNotEqualTo("100%"))
 
-        when(this) {
+        when (this) {
             is HomeFileListFragment -> closeButtonID.setOnAction { homeComponent.files.remove(model.item) }
             else -> {
                 infoID.text = SimpleDateFormat("HH:mm").format(Date())

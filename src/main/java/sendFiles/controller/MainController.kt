@@ -51,7 +51,6 @@ class MainController : Controller() {
         Platform.setImplicitExit(false)
 
         primaryStage.onCloseRequest = EventHandler<WindowEvent> { event -> onExit(sent, downloaded, event) }
-
     }
 
     fun send(list: List<File>, host: String, port: Int) {

@@ -19,12 +19,10 @@ fun onExit(sent: ObservableList<ProgressiveModel<File>>, downloaded: ObservableL
 
     if (wait) {
         val alert = Alert(Alert.AlertType.CONFIRMATION)
-        alert.headerText = "Do you want to wait for the download to complete?"
-        alert.contentText = "Choose your option."
+        alert.headerText = "You still have transfers in process."
 
         val buttonTypeWait = ButtonType("Wait")
         val buttonTypeExit = ButtonType("Exit")
-        //val buttonTypeCancel = ButtonType("Cancel", ButtonData.CANCEL_CLOSE)
 
         alert.buttonTypes.setAll(buttonTypeWait, buttonTypeExit)
 

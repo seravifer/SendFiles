@@ -34,13 +34,13 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </ImageView>
-                <ImageView id="home" fx:id="homeButtonID" fitHeight="37.0" fitWidth="28.0" layoutX="26.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="26.0">
+                <ImageView id="home" fx:id="homeButtonID" fitHeight="37.0" fitWidth="28.0" layoutX="26.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" styleClass="active" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="26.0">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
-               <image>
-                  <Image url="@../img/home.png" />
-               </image>
+                    <image>
+                        <Image url="@../img/home.png" />
+                    </image>
                 </ImageView>
             </children>
         </AnchorPane>

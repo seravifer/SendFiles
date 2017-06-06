@@ -20,8 +20,9 @@ class Root : View() {
     val homeButtonID by fxid<ImageView>()
 
     init {
+        title = "SendFiles"
         primaryStage.minHeight = 500.0
-        primaryStage.minWidth = 460.0
+        primaryStage.minWidth = 450.0
 
         root.center = homeComponent.root
         homeButtonID.setOnMouseClicked { root.center = homeComponent.root; setActive(homeButtonID) }
@@ -31,10 +32,7 @@ class Root : View() {
     }
 
     fun setActive(button: ImageView) {
-        settingsButtonID.styleClass.remove("active")
-        inboxButtonID.styleClass.remove("active")
-        outboxButtonID.styleClass.remove("active")
-        homeButtonID.styleClass.remove("active")
+        root.left.getChildList()?.forEach { it.styleClass.remove("active") }
         button.styleClass.add("active")
     }
 
