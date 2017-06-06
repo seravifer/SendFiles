@@ -8,9 +8,6 @@ import sendFiles.model.ProgressiveModel
 import tornadofx.*
 import java.io.File
 
-/**
- * Created by David on 05/06/2017.
- */
 class Outbox : View() {
     val controller by inject<MainController>()
 

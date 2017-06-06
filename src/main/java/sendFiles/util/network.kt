@@ -11,9 +11,6 @@ import java.io.*
 import java.net.*
 import java.nio.file.Path
 
-/**
- * Created by David on 04/06/2017.
- */
 fun getIpAddress(): String =
     try {
         val myIpAws = URL("http://checkip.amazonaws.com")

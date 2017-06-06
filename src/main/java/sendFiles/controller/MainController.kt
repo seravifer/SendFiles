@@ -1,5 +1,8 @@
 package sendFiles.controller
 
+import javafx.application.Platform
+import javafx.event.EventHandler
+import javafx.stage.WindowEvent
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.channels.produce
@@ -11,7 +14,6 @@ import java.io.File
 import java.net.ConnectException
 import java.net.ServerSocket
 import java.net.Socket
-import java.nio.file.Path
 
 class MainController : Controller() {
     val downloadsDir = app.getDownloadPath().toPath()
@@ -45,6 +47,11 @@ class MainController : Controller() {
                 download(socket, downloadsDir, downloaded).invokeOnCompletion { socket.close() }
             }
         }
+
+        Platform.setImplicitExit(false)
+
+        primaryStage.onCloseRequest = EventHandler<WindowEvent> { event -> onExit(sent, downloaded, event) }
+
     }
 
     fun send(list: List<File>, host: String, port: Int) {

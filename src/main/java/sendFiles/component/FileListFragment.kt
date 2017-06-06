@@ -10,6 +10,9 @@ import sendFiles.model.ProgressiveModel
 import sendFiles.view.Home
 import tornadofx.*
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
     val model = FileModel().bindTo(this)
@@ -21,6 +24,7 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
     val closeButton: Button by fxid("closeID")
     private val progressID: ProgressBar by fxid()
     private val percentID: Label by fxid()
+    private val infoID: Label by fxid()
 
     init {
         nameID.textProperty().bind(model.file.stringBinding { it?.name })
@@ -32,6 +36,14 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
 
         when(this) {
             is HomeFileListFragment -> closeButton.setOnAction { homeComponent.files.remove(model.item) }
+            is OutboxFileListFragment -> {
+                val hourFormat = SimpleDateFormat("HH:mm")
+                infoID.text = hourFormat.format(Date())
+
+                closeButton.isVisible = false
+                progressID.isVisible = false
+                percentID.isVisible = false
+            }
             else -> closeButton.isVisible = false
         }
     }

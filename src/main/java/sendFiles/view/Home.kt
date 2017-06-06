@@ -18,9 +18,6 @@ import sendFiles.util.observableListOf
 import tornadofx.*
 import java.io.File
 
-/**
- * Created by David on 05/06/2017.
- */
 class Home : View() {
     private val controller by inject<MainController>()
 
