@@ -12,10 +12,15 @@ class ProgressiveModel<T>(initialValue: T? = null) : ItemViewModel<T>() {
 
     enum class FileState {
         READY,
+        WAITING,
+        ACCEPTED,
+
         SENDING,
         RECEIVING,
+
         FAILED,
         CANCELED,
+
         RECEIVED,
         SENT
     }

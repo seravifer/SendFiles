@@ -1,6 +1,5 @@
 package sendFiles.controller
 
-import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
@@ -9,6 +8,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.channels.produce
 import kotlinx.coroutines.experimental.launch
+import sendFiles.model.NetworkHandler
 import sendFiles.model.ProgressiveModel
 import sendFiles.util.*
 import tornadofx.*
@@ -48,7 +48,7 @@ class MainController : Controller() {
     init {
         launch(CommonPool) {
             clients.consumeEach { socket ->
-                download(socket, downloadsDir, downloaded).invokeOnCompletion { socket.close() }
+                NetworkHandler.download(socket, downloadsDir, downloaded).invokeOnCompletion { socket.close() }
             }
         }
 
@@ -69,7 +69,7 @@ class MainController : Controller() {
             launch(CommonPool) {
                 try {
                     Socket(host, port).use {
-                        uploadFile(it, fileProgressive)
+                        NetworkHandler.uploadFile(it, fileProgressive)
                     }
                 } catch(e: ConnectException) {
                     fileProgressive.state = ProgressiveModel.FileState.FAILED
