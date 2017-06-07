@@ -1,10 +1,9 @@
 .close {
     -fx-background-color: transparent;
-    -fx-image: url("img/close.png");
 }
 
 .close:hover {
-    -fx-image: url("img/close-hover.png");
+    -fx-text-fill: #F44336;
 }
 
 /***********************************************

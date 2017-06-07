@@ -7,7 +7,7 @@ import sendFiles.Main
 import sendFiles.controller.MainController
 import tornadofx.*
 
-class Root : View("SendFiles") {
+class Root : View("SendFile") {
     val controller = find<MainController>()
     val homeComponent by inject<Home>()
     val inboxComponent by inject<Inbox>()
@@ -22,9 +22,7 @@ class Root : View("SendFiles") {
     val homeButtonID by fxid<ImageView>()
 
     init {
-        primaryStage.icons.addAll(Image(Main::class.java.getResourceAsStream("icon/mipmap-hdpi/icon.png")),
-                                  Image(Main::class.java.getResourceAsStream("icon/mipmap-mdpi/icon.png")),
-                                  Image(Main::class.java.getResourceAsStream("icon/mipmap-xhdpi/icon.png")))
+        primaryStage.icons.add(Image(Main::class.java.getResourceAsStream("icon/mipmap-mdpi/icon.png")))
         primaryStage.minHeight = 500.0
         primaryStage.minWidth = 455.0
 

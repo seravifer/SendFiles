@@ -41,8 +41,8 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
         infoID.text = SimpleDateFormat("HH:mm").format(Date())
 
         model.itemProperty.addListener { _, _, new ->
-            new?.stateProperty()?.addListener { _, _, new ->
-                if (new == ProgressiveModel.FileState.CANCELED) {
+            new?.stateProperty()?.addListener { _, _, event ->
+                if (event == ProgressiveModel.FileState.CANCELED) {
                     closeID.isVisible = true
                     closeButtonID.isVisible = false
                 }
@@ -65,6 +65,7 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
                         model.item.state = ProgressiveModel.FileState.ACCEPTED
                         acceptID.isVisible = false
                     }
+
                 }
             }
 
