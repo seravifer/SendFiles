@@ -22,20 +22,17 @@ fun main(args: Array<String>) {
 }
 
 @Throws(RouterException::class)
-private fun connect(): IRouter? {
-    val routerFactory: AbstractRouterFactory
-    try {
-        routerFactory = createRouterFactory()
-    } catch (e: RouterException) {
+private fun connect(): IRouter? =
+    try { selectRouter(createRouterFactory().findRouters()) }
+    catch (e: RouterException) {
         log.warning("Could not create router factory")
-        return null
+        null
     }
-    return selectRouter(routerFactory.findRouters())
-}
+
 
 @Throws(RouterException::class)
 private fun addPortForwarding(router: IRouter) {
-    val internalClient = getLocalIP()?.hostAddress
+    val internalClient = localIP.hostAddress
     val internalPort = 4444
     val externalPort = 4444
     val protocol = Protocol.TCP
@@ -52,12 +49,9 @@ private fun existPort(router: IRouter) = router.portMappings.any { it.internalPo
 
 @Throws(RouterException::class)
 private fun createRouterFactory(): AbstractRouterFactory {
-    val routerFactoryClass: Class<AbstractRouterFactory>
-    try {
-        routerFactoryClass = Class.forName(ClingRouterFactory::class.java.name) as Class<AbstractRouterFactory>
-    } catch (e: ClassNotFoundException) {
-        throw RouterException("Did not find router factory class for name " + ClingRouterFactory::class.java.name, e)
-    }
+    val routerFactoryClass = Class.forName(ClingRouterFactory::class.java.name) as? Class<AbstractRouterFactory>
+            ?: throw RouterException("Did not find router factory class for name ${ClingRouterFactory::class.java.name}")
+
     try {
         val constructor = routerFactoryClass.getConstructor(PortMapperApp::class.java)
         return constructor.newInstance(PortMapperApp())
@@ -66,13 +60,6 @@ private fun createRouterFactory(): AbstractRouterFactory {
     }
 }
 
-private fun selectRouter(foundRouters: List<IRouter>): IRouter? {
-    if (foundRouters.isNotEmpty()) {
-        val router = foundRouters[0]
-        log.info("Conected to " + router.name)
-        return router
-    } else {
-        log.warning("Found no router")
-        return null
-    }
-}
+private fun selectRouter(foundRouters: List<IRouter>): IRouter? =
+    foundRouters.firstOrNull()
+            .also { if (it == null) log.warning("Router not found") else log.info("Connected to ${it.name}") }
