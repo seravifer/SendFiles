@@ -1,5 +1,5 @@
 ##TODO  
 
-* Cancel file sending
 * Add SSL socket (SSLServerSocketFactory)
-* Support drag and drod folders
+* Support drag and drod folders (zip)
+* Portmapper
