@@ -32,3 +32,22 @@ inline suspend fun InputStream.copyTo(out: OutputStream, crossinline progressUpd
         run(JavaFx) { progressUpdate(totalSize) }
     }
 }
+
+
+/**
+ * Solve a problem that confuses ip from VMs
+ * And problem on Linux with non-loopback IP
+ */
+fun getLocalIP(): InetAddress? {
+    val en = NetworkInterface.getNetworkInterfaces()
+    while (en.hasMoreElements()) {
+        val en2 = en.nextElement().inetAddresses
+        while (en2.hasMoreElements()) {
+            val addr = en2.nextElement()
+            if (!addr.isLoopbackAddress && addr is Inet4Address) {
+                return addr
+            }
+        }
+    }
+    return null
+}
