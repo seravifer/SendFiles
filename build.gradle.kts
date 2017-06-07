@@ -27,6 +27,7 @@ dependencies {
     compile(kotlinxModule("coroutines-jdk8", coroutinesVersion))
     compile(kotlinxModule("coroutines-javafx", coroutinesVersion))
     compile("no.tornado:tornadofx:1.7.5")
+    compile(files("lib/portmapper-2.0.0.jar"))
 }
 
 tasks {

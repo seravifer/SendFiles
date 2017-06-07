@@ -24,13 +24,12 @@ class MainController : Controller() {
     val downloaded = observableListOf<ProgressiveModel<File>>()
 
     private val testPorts = 4444..4448
-    var actualPort = "0000"
+    val actualPort by lazy { server.localPort }
 
     private val server = try {
         testPorts.first { available(it) }
                 .let {
                     log.info("Server running in the port $it")
-                    actualPort = it.toString()
                     ServerSocket(it)
                 }
     } catch (e: NoSuchElementException) {

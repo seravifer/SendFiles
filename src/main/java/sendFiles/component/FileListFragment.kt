@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
+import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import sendFiles.model.FileModel
 import sendFiles.model.ProgressiveModel
@@ -23,6 +24,8 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
     private val progressID: ProgressBar by fxid()
     private val percentID: Label by fxid()
     private val infoID: Label by fxid()
+    private val closeID: ImageView by fxid()
+    private val acceptID: ImageView by fxid()
     val closeButtonID: Button by fxid()
 
     init {
@@ -32,14 +35,40 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
         progressID.visibleProperty().bind(progressID.progressProperty().lessThan(1.0))
 
         percentID.bind(Bindings.format("%.0f%s", model.progress.doubleBinding { (it?.toDouble() ?: 0.0) * 100 }, "%"))
-        percentID.visibleProperty().bind(percentID.textProperty().isNotEqualTo("100%"))
+        val progressProperty = progressID.progressProperty()
+        percentID.visibleProperty().bind(progressProperty.lessThan(1.0).and(progressProperty.isNotEqualTo(0)))
+
+        infoID.text = SimpleDateFormat("HH:mm").format(Date())
+
+        model.itemProperty.addListener { _, _, new ->
+            new?.stateProperty()?.addListener { _, _, event ->
+                if (event == ProgressiveModel.FileState.CANCELED) {
+                    closeID.isVisible = true
+                    closeButtonID.isVisible = false
+                }
+            }
+        }
 
         when (this) {
-            is HomeFileListFragment -> closeButtonID.setOnAction { homeComponent.files.remove(model.item) }
-            else -> {
-                infoID.text = SimpleDateFormat("HH:mm").format(Date())
-                closeButtonID.isVisible = false
+            is HomeFileListFragment -> {
+                closeButtonID.setOnAction {
+                    homeComponent.files.remove(model.item)
+                }
             }
+            is InboxFileListFragment, is OutboxFileListFragment -> {
+                closeButtonID.setOnAction {
+                    model.item.state = ProgressiveModel.FileState.CANCELED
+                }
+                if (this is InboxFileListFragment) {
+                    acceptID.isVisible = true
+                    acceptID.setOnMouseClicked {
+                        model.item.state = ProgressiveModel.FileState.ACCEPTED
+                        acceptID.isVisible = false
+                    }
+
+                }
+            }
+
         }
     }
 }

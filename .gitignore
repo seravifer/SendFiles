@@ -5,3 +5,4 @@ out/
 /.gradle/
 *.iml
 conf
+/lib/portmapper-2.0.0.jar
