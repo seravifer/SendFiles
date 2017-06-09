@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import sendFiles.component.HomeFileListFragment
 import sendFiles.controller.MainController
-import sendFiles.model.ProgressiveModel
+import sendFiles.model.ProgressInfo
 import sendFiles.util.getIpAddress
 import sendFiles.util.observableListOf
 import tornadofx.*
@@ -24,13 +24,13 @@ class Home : View() {
     override val root by fxml<AnchorPane>()
 
     val dragID by fxid<AnchorPane>()
-    val sendBoxID by fxid<ListView<ProgressiveModel<File>>>()
+    val sendBoxID by fxid<ListView<ProgressInfo<File>>>()
     val ipID by fxid<Label>()
     val sendID by fxid<StackPane>()
     val hostID by fxid<TextField>()
     val portID by fxid<TextField>()
 
-    var files = observableListOf<ProgressiveModel<File>>()
+    var files = observableListOf<ProgressInfo<File>>()
 
     init {
         ipID.text = getIpAddress() + ":" + controller.actualPort
@@ -55,7 +55,7 @@ class Home : View() {
     private fun mouseDragDropped(dragEvent: DragEvent) {
         val db = dragEvent.dragboard
         dragEvent.isDropCompleted = if (db.hasFiles()) {
-            files.addAll(db.files.map { ProgressiveModel<File>().apply { value = it } })
+            files.addAll(db.files.map { ProgressInfo<File>().apply { value = it } })
             true
         } else {
             false

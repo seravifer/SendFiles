@@ -7,14 +7,14 @@ import javafx.scene.control.ProgressBar
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
 import sendFiles.model.FileModel
-import sendFiles.model.ProgressiveModel
+import sendFiles.model.ProgressInfo
 import sendFiles.view.Home
 import tornadofx.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
+sealed class FileListFragment : ListCellFragment<ProgressInfo<File>>() {
     val model = FileModel().bindTo(this)
     val homeComponent by inject<Home>()
 
@@ -42,7 +42,7 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
 
         model.itemProperty.addListener { _, _, new ->
             new?.stateProperty()?.addListener { _, _, event ->
-                if (event == ProgressiveModel.FileState.CANCELED) {
+                if (event == ProgressInfo.FileState.CANCELED) {
                     closeID.isVisible = true
                     closeButtonID.isVisible = false
                 }
@@ -57,12 +57,12 @@ sealed class FileListFragment : ListCellFragment<ProgressiveModel<File>>() {
             }
             is InboxFileListFragment, is OutboxFileListFragment -> {
                 closeButtonID.setOnAction {
-                    model.item.state = ProgressiveModel.FileState.CANCELED
+                    model.item.state = ProgressInfo.FileState.CANCELED
                 }
                 if (this is InboxFileListFragment) {
                     acceptID.isVisible = true
                     acceptID.setOnMouseClicked {
-                        model.item.state = ProgressiveModel.FileState.ACCEPTED
+                        model.item.state = ProgressInfo.FileState.ACCEPTED
                         acceptID.isVisible = false
                     }
 

@@ -4,7 +4,7 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.AnchorPane
 import sendFiles.component.OutboxFileListFragment
 import sendFiles.controller.MainController
-import sendFiles.model.ProgressiveModel
+import sendFiles.model.ProgressInfo
 import tornadofx.*
 import java.io.File
 
@@ -13,7 +13,7 @@ class Outbox : View() {
 
     override val root by fxml<AnchorPane>()
 
-    private val outboxID by fxid<ListView<ProgressiveModel<File>>>()
+    private val outboxID by fxid<ListView<ProgressInfo<File>>>()
 
     init {
         outboxID.cellFragment(OutboxFileListFragment::class)

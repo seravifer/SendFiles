@@ -6,51 +6,29 @@ import javafx.scene.control.ButtonType
 import javafx.stage.WindowEvent
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.consumeEach
-import kotlinx.coroutines.experimental.channels.produce
+import kotlinx.coroutines.experimental.javafx.JavaFx
 import kotlinx.coroutines.experimental.launch
-import sendFiles.model.NetworkHandler
-import sendFiles.model.ProgressiveModel
+import kotlinx.coroutines.experimental.run
+import sendFiles.model.FileTransferInfo
+import sendFiles.model.network.FileConnection
+import sendFiles.model.network.FileReceiveConnection
+import sendFiles.model.network.FileSendConnection
+import sendFiles.model.network.Server
+import sendFiles.model.network.event.ReceptionRequest
+import sendFiles.model.network.event.SendRequest
 import sendFiles.util.*
 import tornadofx.*
 import java.io.File
-import java.net.ConnectException
-import java.net.ServerSocket
-import java.net.Socket
 
 class MainController : Controller() {
     val downloadsDir = app.getDownloadPath().toPath()
 
-    val sent = observableListOf<ProgressiveModel<File>>()
-    val downloaded = observableListOf<ProgressiveModel<File>>()
+    val sent = observableListOf<FileTransferInfo<FileSendConnection>>()
+    val downloaded = observableListOf<FileTransferInfo<FileReceiveConnection>>()
 
-    private val testPorts = 4444..4448
-    val actualPort by lazy { server.localPort }
-
-    private val server = try {
-        testPorts.first { available(it) }
-                .let {
-                    log.info("Server running in the port $it")
-                    ServerSocket(it)
-                }
-    } catch (e: NoSuchElementException) {
-        kotlin.error("All ports between ${testPorts.first} and ${testPorts.endInclusive} are busy")
-    }
-
-    private val clients = produce<Socket>(CommonPool) {
-        while (!server.isClosed) {
-            val client = server.accept()
-            log.info("Accepting connection of ${client.inetAddress}")
-            send(client)
-        }
-    }
+    val actualPort by lazy { Server.localPort }
 
     init {
-        launch(CommonPool) {
-            clients.consumeEach { socket ->
-                NetworkHandler.download(socket, downloadsDir, downloaded).invokeOnCompletion { socket.close() }
-            }
-        }
-
         val previousHandler = primaryStage.onCloseRequest
         primaryStage.onCloseRequest = EventHandler<WindowEvent> {
             if (confirmExit()) {
@@ -59,27 +37,27 @@ class MainController : Controller() {
                 it.consume()
             }
         }
-    }
 
-    fun send(list: List<File>, host: String, port: Int) {
-        for (file in list) {
-            val fileProgressive = ProgressiveModel(file)
-            sent.add(fileProgressive)
-            launch(CommonPool) {
-                try {
-                    Socket(host, port).use {
-                        NetworkHandler.uploadFile(it, fileProgressive)
-                    }
-                } catch(e: ConnectException) {
-                    fileProgressive.state = ProgressiveModel.FileState.FAILED
+        subscribe<SendRequest> {
+            launch(JavaFx) {
+                sent.addAll(it.filesTransferProgress)
+                it.sendHandler.sendHeaders(it.filesTransferProgress)
+            }
+        }
+
+        subscribe<ReceptionRequest> {
+            launch(JavaFx) {
+                it.receptionHandler.receiveHeaders(downloadsDir).consumeEach {
+                    downloaded.add(it)
                 }
             }
         }
     }
 
     fun confirmExit(): Boolean {
-        val sending = sent.any { it.state == ProgressiveModel.FileState.SENDING }
-        val downloading = downloaded.any { it.state == ProgressiveModel.FileState.RECEIVING }
+        val transferring: (FileTransferInfo<out FileConnection>) -> Boolean = { it.state == FileTransferInfo.FileState.TRANSFERRING }
+        val sending = sent.any(transferring)
+        val downloading = downloaded.any(transferring)
 
         val message = when {
             sending && downloading -> "You have uploads and downloads in process"
@@ -104,7 +82,6 @@ class MainController : Controller() {
     }
 
     fun close() {
-        server.close()
-        clients.cancel()
+        Server.close()
     }
 }

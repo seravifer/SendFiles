@@ -4,7 +4,7 @@ import javafx.scene.control.ListView
 import javafx.scene.layout.AnchorPane
 import sendFiles.component.InboxFileListFragment
 import sendFiles.controller.MainController
-import sendFiles.model.ProgressiveModel
+import sendFiles.model.ProgressInfo
 import tornadofx.*
 import java.io.File
 
@@ -16,7 +16,7 @@ class Inbox : View() {
 
     override val root by fxml<AnchorPane>()
 
-    val inboxID by fxid<ListView<ProgressiveModel<File>>>()
+    val inboxID by fxid<ListView<ProgressInfo<File>>>()
 
     init {
         inboxID.cellFragment(InboxFileListFragment::class)

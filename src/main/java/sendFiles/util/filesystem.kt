@@ -1,8 +1,20 @@
 package sendFiles.util
 
 import tornadofx.*
+import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.security.DigestInputStream
+import java.security.MessageDigest
+
+fun File.md5() =
+        if (exists()) {
+            val digestor = MessageDigest.getInstance("MD5")
+            inputStream().use { DigestInputStream(it, digestor); digestor.digest() }
+        } else null
+
+
+
 
 fun String.toPath(): Path = Paths.get(this)
 
