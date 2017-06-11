@@ -4,57 +4,37 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.channels.produce
-import kotlinx.coroutines.experimental.javafx.JavaFx
+import sendFiles.model.FileInfo
 import sendFiles.model.FileTransferInfo
+import sendFiles.model.network.event.AbortAllConnection
 import sendFiles.util.copyTo
 import sendFiles.util.getDownloadPath
-import sendFiles.util.toPath
-import tornadofx.*
-import java.io.*
-import java.net.Socket
+import tornadofx.Component
+import tornadofx.singleAssign
 import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicInteger
 
-
-/**
- * Created by David on 08/06/2017.
- */
-sealed class NetworkConnection<T>(socket: Socket) : Component(), Closeable by socket {
-    protected val inputStream: InputStream by lazy { socket.getInputStream() }
-    protected val outputStream: OutputStream by lazy { socket.getOutputStream() }
-
-    protected val infoReader: DataInputStream by lazy { DataInputStream(inputStream) }
-    protected val infoSender: DataOutputStream by lazy { DataOutputStream(outputStream) }
-
-    suspend fun sendAck(ack: Boolean) {
-        run(CommonPool) { infoSender.writeBoolean(ack) }
-    }
-
-    suspend fun receiveAck(): Boolean = run(CommonPool) { infoReader.readBoolean() }
-}
-
-sealed class FileConnection(socket: Socket) : NetworkConnection<File>(socket) {
-    protected suspend fun sendFileInfo(file: FileTransferInfo<*>) {
+interface FileConnection<out T : FileInfo> : Connection {
+    suspend fun sendFileInfo(file: FileInfo) {
         run(CommonPool) {
-            infoSender.writeUTF(file.value.name)
+            infoSender.writeUTF(file.name)
             infoSender.write(file.md5, 0, 16)
             infoSender.writeLong(file.size)
         }
     }
 
-    abstract suspend fun receiveFileInfo(dirPath: Path = app.getDownloadPath().toPath()): FileTransferInfo<out FileConnection>
+    suspend fun receiveFileInfo(dirPath: Path): T
 }
 
 /**
  * Created by David on 08/06/2017.
  */
-class FileSendConnection(socket: Socket) : FileConnection(socket) {
+class FileSendConnection(connection: Connection) : Component(), FileConnection<FileTransferInfo<FileSendConnection>>, Connection by connection {
 
     private var filesInfo: List<FileTransferInfo<FileSendConnection>> by singleAssign()
 
     private val fileRequests by lazy {
         produce(CommonPool) {
-            send(receiveFileInfo())
+            send(receiveFileInfo(app.getDownloadPath()))
         }
     }
 
@@ -64,8 +44,15 @@ class FileSendConnection(socket: Socket) : FileConnection(socket) {
             if (localFileInfo.state != FileTransferInfo.FileState.CANCELED) {
                 sendAck(true)
                 sendFileData(localFileInfo)
-            }
-            else sendAck(false)
+            } else sendAck(false)
+        }
+    }
+
+    init {
+        subscribe<AbortAllConnection> { close() }
+
+        launch(CommonPool) {
+            infoSender.writeUTF("FILE")
         }
     }
 
@@ -98,10 +85,35 @@ class FileSendConnection(socket: Socket) : FileConnection(socket) {
 
 }
 
+sealed class ClientConnection(connection: Connection) : Component(), Connection by connection {
+    init {
+        subscribe<AbortAllConnection> { close() }
+    }
+}
+
+class FileTransferCanceler(connection: Connection, file: FileInfo) : ClientConnection(connection), FileConnection<FileInfo> {
+    private val job: Job
+
+    init {
+        job = if (sender) launch(CommonPool) {
+            infoSender.writeUTF("CANCEL")
+            sendFileInfo(file)
+        } else launch(CommonPool) {
+            fire()
+        }
+    }
+
+    override suspend fun receiveFileInfo(dirPath: Path): FileInfo = FileInfo.create(
+            name = run(CommonPool) { infoReader.readUTF() },
+            md5 = run(CommonPool) { infoReader.readBytes(16) },
+            size = run(CommonPool) { infoReader.readLong() }
+    )
+}
+
 /**
  * Created by David on 06/06/2017.
  */
-class FileReceiveConnection(socket: Socket) : FileConnection(socket) {
+class FileReceiveConnection(connection: Connection) : ClientConnection(connection), FileConnection<FileTransferInfo<FileReceiveConnection>> {
 
     private val fileReceptionQueue = Channel<FileTransferInfo<FileReceiveConnection>>()
 
@@ -134,10 +146,11 @@ class FileReceiveConnection(socket: Socket) : FileConnection(socket) {
         fileReceptionQueue.send(fileInfo)
     }
 
-    fun receiveHeaders(dirPath: Path) = produce(CommonPool) {
+    fun receiveHeaders(dirPath: Path = app.getDownloadPath()) = produce(CommonPool) {
         while (receiveAck()) {
             send(receiveFileInfo(dirPath))
         }
+        this.close()
     }
 
 }

@@ -1,15 +1,16 @@
 package sendFiles.model.network
 
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.channels.produce
 import kotlinx.coroutines.experimental.launch
+import sendFiles.model.network.event.AbortAllConnection
 import sendFiles.model.network.event.ReceptionRequest
 import sendFiles.util.available
 import tornadofx.*
 import java.io.Closeable
 import java.net.ServerSocket
-import java.net.Socket
 
 /**
  * Created by David on 08/06/2017.
@@ -27,20 +28,42 @@ object Server : Component(), Closeable {
         kotlin.error("All ports between ${testPorts.first} and ${testPorts.endInclusive} are busy")
     }
 
-    private val clients = produce<Socket>(CommonPool) {
+    private val clients = produce<ClientConnection>(CommonPool) {
         while (!server.isClosed) {
-            val client = server.accept()
-            log.info("Accepting connection of ${client.inetAddress}")
-            send(client)
+            val clientSocket = server.accept()
+            log.info("Accepting Connection of ${clientSocket.inetAddress}")
+            val connectionReader = ConnectionCauseReader(clientSocket)
+            send(
+                    if (connectionReader.readProtocol() == "FILE") FileReceiveConnection(connectionReader)
+                    else FileTransferCanceler(connectionReader)
+            )
         }
     }
+
+    private val fileClients = Channel<FileReceiveConnection>()
+    private val metaClients = Channel<FileTransferCanceler>()
 
     val localPort by lazy { server.localPort }
 
     init {
+        subscribe<AbortAllConnection> { close() }
+
         launch(CommonPool) {
             clients.consumeEach {
+                when(it) {
+                    is FileReceiveConnection -> fileClients.send(it)
+                    is FileTransferCanceler -> metaClients.send(it)
+                }
+            }
+        }
+        launch(CommonPool) {
+            fileClients.consumeEach {
                 fire(ReceptionRequest(it))
+            }
+        }
+        launch(CommonPool) {
+            metaClients.consumeEach {
+
             }
         }
     }

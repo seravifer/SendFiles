@@ -4,11 +4,9 @@ import javafx.event.EventHandler
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import javafx.stage.WindowEvent
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.javafx.JavaFx
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.run
 import sendFiles.model.FileTransferInfo
 import sendFiles.model.network.FileConnection
 import sendFiles.model.network.FileReceiveConnection
@@ -18,15 +16,10 @@ import sendFiles.model.network.event.ReceptionRequest
 import sendFiles.model.network.event.SendRequest
 import sendFiles.util.*
 import tornadofx.*
-import java.io.File
 
 class MainController : Controller() {
-    val downloadsDir = app.getDownloadPath().toPath()
-
     val sent = observableListOf<FileTransferInfo<FileSendConnection>>()
     val downloaded = observableListOf<FileTransferInfo<FileReceiveConnection>>()
-
-    val actualPort by lazy { Server.localPort }
 
     init {
         val previousHandler = primaryStage.onCloseRequest
@@ -40,15 +33,16 @@ class MainController : Controller() {
 
         subscribe<SendRequest> {
             launch(JavaFx) {
-                sent.addAll(it.filesTransferProgress)
-                it.sendHandler.sendHeaders(it.filesTransferProgress)
+                sent.addAll(it.filesTransferInfo)
             }
         }
 
         subscribe<ReceptionRequest> {
             launch(JavaFx) {
-                it.receptionHandler.receiveHeaders(downloadsDir).consumeEach {
-                    downloaded.add(it)
+                it.filesTransferInfo.consumeEach { fileInfo ->
+                    downloaded.add(fileInfo)
+                    //Dirty thing which shouldn't be there but I didn't know to do it at event init
+                    setInScope(it.receptionHandler, fileInfo)
                 }
             }
         }
